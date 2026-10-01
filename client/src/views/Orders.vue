@@ -74,6 +74,58 @@
           </table>
         </div>
       </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">{{ t('orders.submittedOrders.title') }} ({{ restockingOrders.length }})</h3>
+        </div>
+        <div v-if="loadingRestocking" class="loading">{{ t('common.loading') }}</div>
+        <div v-else-if="restockingError" class="error">{{ restockingError }}</div>
+        <div v-else class="table-container">
+          <table class="restocking-orders-table">
+            <thead>
+              <tr>
+                <th class="col-ro-order-number">{{ t('orders.submittedOrders.orderNumber') }}</th>
+                <th class="col-ro-supplier">{{ t('orders.submittedOrders.supplier') }}</th>
+                <th class="col-ro-items">{{ t('orders.submittedOrders.items') }}</th>
+                <th class="col-ro-date">{{ t('orders.submittedOrders.orderDate') }}</th>
+                <th class="col-ro-lead-time">{{ t('orders.submittedOrders.leadTime') }}</th>
+                <th class="col-ro-date">{{ t('orders.submittedOrders.expectedDelivery') }}</th>
+                <th class="col-ro-cost">{{ t('orders.submittedOrders.totalCost') }}</th>
+                <th class="col-ro-status">{{ t('orders.submittedOrders.status') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="order in restockingOrders" :key="order.id">
+                <td class="col-ro-order-number"><strong>{{ order.order_number }}</strong></td>
+                <td class="col-ro-supplier">{{ order.supplier_name }}</td>
+                <td class="col-ro-items">
+                  <details class="items-details">
+                    <summary class="items-summary">
+                      {{ t('orders.itemsCount', { count: order.items.length }) }}
+                    </summary>
+                    <div class="items-dropdown">
+                      <div v-for="item in order.items" :key="item.sku" class="item-entry">
+                        <span class="item-name">{{ item.item_name }}</span>
+                        <span class="item-meta">{{ t('orders.quantity') }}: {{ item.quantity }} @ {{ formatCurrency(item.unit_cost, currentCurrency) }}</span>
+                      </div>
+                    </div>
+                  </details>
+                </td>
+                <td class="col-ro-date">{{ formatDate(order.order_date) }}</td>
+                <td class="col-ro-lead-time">{{ t('orders.submittedOrders.leadTimeDays', { days: order.lead_time_days }) }}</td>
+                <td class="col-ro-date">{{ formatDate(order.expected_delivery_date) }}</td>
+                <td class="col-ro-cost"><strong>{{ formatCurrency(order.total_cost, currentCurrency) }}</strong></td>
+                <td class="col-ro-status">
+                  <span :class="['badge', getOrderStatusClass(order.status)]">
+                    {{ order.status }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -83,6 +135,7 @@ import { ref, onMounted, watch, computed } from 'vue'
 import { api } from '../api'
 import { useFilters } from '../composables/useFilters'
 import { useI18n } from '../composables/useI18n'
+import { formatCurrency } from '../utils/currency'
 
 export default {
   name: 'Orders',
@@ -95,6 +148,10 @@ export default {
     const loading = ref(true)
     const error = ref(null)
     const orders = ref([])
+
+    const restockingOrders = ref([])
+    const loadingRestocking = ref(true)
+    const restockingError = ref(null)
 
     // Use shared filters
     const {
@@ -129,6 +186,17 @@ export default {
       loadOrders()
     })
 
+    const loadRestockingOrders = async () => {
+      try {
+        loadingRestocking.value = true
+        restockingOrders.value = await api.getRestockingOrders()
+      } catch (err) {
+        restockingError.value = 'Failed to load submitted orders: ' + err.message
+      } finally {
+        loadingRestocking.value = false
+      }
+    }
+
     const getOrdersByStatus = (status) => {
       return orders.value.filter(order => order.status === status)
     }
@@ -154,16 +222,22 @@ export default {
     }
 
     onMounted(loadOrders)
+    onMounted(loadRestockingOrders)
 
     return {
       t,
       loading,
       error,
       orders,
+      restockingOrders,
+      loadingRestocking,
+      restockingError,
       getOrdersByStatus,
       getOrderStatusClass,
       formatDate,
       currencySymbol,
+      currentCurrency,
+      formatCurrency,
       translateProductName,
       translateCustomerName
     }
@@ -200,6 +274,40 @@ export default {
 }
 
 .col-value {
+  width: 120px;
+}
+
+/* Submitted (restocking) orders table */
+.restocking-orders-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.col-ro-order-number {
+  width: 130px;
+}
+
+.col-ro-supplier {
+  width: 180px;
+}
+
+.col-ro-items {
+  width: 160px;
+}
+
+.col-ro-date {
+  width: 140px;
+}
+
+.col-ro-lead-time {
+  width: 110px;
+}
+
+.col-ro-cost {
+  width: 120px;
+}
+
+.col-ro-status {
   width: 120px;
 }
 

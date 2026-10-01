@@ -6,6 +6,7 @@ export default {
     orders: '注文',
     finance: '財務',
     demandForecast: '需要予測',
+    restocking: '補充',
     companyName: '触媒コンポーネンツ',
     subtitle: '在庫管理システム'
   },
@@ -126,6 +127,18 @@ export default {
       status: 'ステータス',
       expectedDelivery: '予定配達日',
       actualDelivery: '実際の配達日'
+    },
+    submittedOrders: {
+      title: '提出済み注文',
+      orderNumber: '注文番号',
+      supplier: 'サプライヤー',
+      items: '品目',
+      orderDate: '注文日',
+      leadTime: 'リードタイム',
+      leadTimeDays: '{days}日',
+      expectedDelivery: '予定配達日',
+      totalCost: '合計金額',
+      status: 'ステータス'
     }
   },
 
@@ -185,6 +198,39 @@ export default {
       change: '変化',
       trend: 'トレンド',
       period: '期間'
+    }
+  },
+
+  // Restocking
+  restocking: {
+    title: '補充',
+    description: '予算を設定して緊急度順の補充推奨を取得',
+    budgetLabel: '利用可能な予算',
+    budgetUsed: '{budget}中{used}使用',
+    remainingBudget: '残り予算',
+    placeOrder: '注文する',
+    placingOrder: '注文処理中...',
+    orderSuccess: '注文{orderNumber}が正常に送信されました — 注文タブでご確認ください',
+    noRecommendations: '推奨品目がありません — 予算を増やしてください',
+    table: {
+      sku: 'SKU',
+      itemName: '品目名',
+      category: 'カテゴリ',
+      warehouse: '倉庫',
+      quantityOnHand: '在庫数',
+      reorderPoint: '発注点',
+      forecastedDemand: '予測需要',
+      trend: 'トレンド',
+      recommendedQuantity: '推奨発注数',
+      unitCost: '単価',
+      lineTotal: '小計',
+      reason: '理由'
+    },
+    reasons: {
+      belowReorderAndGrowing: '発注点を下回り、需要増加中',
+      belowReorder: '発注点を下回っています',
+      demandGrowing: '需要増加中',
+      restockRecommended: '補充推奨'
     }
   },
 

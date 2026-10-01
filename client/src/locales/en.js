@@ -6,6 +6,7 @@ export default {
     orders: 'Orders',
     finance: 'Finance',
     demandForecast: 'Demand Forecast',
+    restocking: 'Restocking',
     companyName: 'Catalyst Components',
     subtitle: 'Inventory Management System'
   },
@@ -126,6 +127,18 @@ export default {
       status: 'Status',
       expectedDelivery: 'Expected Delivery',
       actualDelivery: 'Actual Delivery'
+    },
+    submittedOrders: {
+      title: 'Submitted Orders',
+      orderNumber: 'Order Number',
+      supplier: 'Supplier',
+      items: 'Items',
+      orderDate: 'Order Date',
+      leadTime: 'Lead Time',
+      leadTimeDays: '{days} days',
+      expectedDelivery: 'Expected Delivery',
+      totalCost: 'Total Cost',
+      status: 'Status'
     }
   },
 
@@ -185,6 +198,39 @@ export default {
       change: 'Change',
       trend: 'Trend',
       period: 'Period'
+    }
+  },
+
+  // Restocking
+  restocking: {
+    title: 'Restocking',
+    description: 'Set a budget and get urgency-ranked restock recommendations',
+    budgetLabel: 'Available Budget',
+    budgetUsed: '{used} of {budget} used',
+    remainingBudget: 'Remaining Budget',
+    placeOrder: 'Place Order',
+    placingOrder: 'Placing Order...',
+    orderSuccess: 'Order {orderNumber} placed successfully — view it in the Orders tab',
+    noRecommendations: 'No items to recommend — increase the budget',
+    table: {
+      sku: 'SKU',
+      itemName: 'Item Name',
+      category: 'Category',
+      warehouse: 'Warehouse',
+      quantityOnHand: 'Qty on Hand',
+      reorderPoint: 'Reorder Point',
+      forecastedDemand: 'Forecasted Demand',
+      trend: 'Trend',
+      recommendedQuantity: 'Recommended Qty',
+      unitCost: 'Unit Cost',
+      lineTotal: 'Line Total',
+      reason: 'Reason'
+    },
+    reasons: {
+      belowReorderAndGrowing: 'Below reorder point, demand increasing',
+      belowReorder: 'Below reorder point',
+      demandGrowing: 'Demand increasing',
+      restockRecommended: 'Restock recommended'
     }
   },
 
